@@ -8,7 +8,7 @@ npm install
 
 Generar el dist
 ``
-ts -w
+tsc -w
 ``
 
 Levantar servidor: Cualquiera de esos
