@@ -1,9 +1,21 @@
 import socketIO, { Socket } from 'socket.io'
+import { UsuarioLista } from "../classes/usuario-lista"
+import { Usuario } from "../classes/usuario";
+
+export const usuariosConectados = new UsuarioLista()
+
+/* La función conectarCliente es almacenar en la clase Usuario Lista el usuario logeado */
+
+export const conectarCliente = ( cliente: Socket ) => {
+    const usuario = new Usuario( cliente.id )
+    usuariosConectados.agregar( usuario )
+}
 
 export const desconectar = ( cliente: Socket ) => {
 
     cliente.on('disconnect', () => {
         console.log('cliente desconectado')
+        usuariosConectados.borrarUsuario( cliente.id )
     })
 
 }
@@ -17,6 +29,25 @@ export const mensaje = ( cliente: Socket, io: socketIO.Server ) => {
     } )
 
 }
+
+// Configurar Usuario
+export const configurarUsuario = (cliente: Socket, io: socketIO.Server ) => {
+
+    cliente.on('configurar-usuario', ( payload: { nombre: string }, callback: Function ) => {
+
+        // console.log('configurando usuario', payload)
+
+        usuariosConectados.actualizarNombre( cliente.id, payload.nombre )
+
+        callback({
+            ok: true,
+            mensaje: `Usuario ${payload.nombre} configurado`
+        })
+
+    })
+
+}
+
 
 /* Nota:
 * En este archivo tendremos las configuraciones / opciones de cada acción

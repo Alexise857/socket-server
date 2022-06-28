@@ -43,8 +43,16 @@ export default class Server {
         console.log('escuchando sockets')
         // Necesito escuchar cuando un cliente se conecta a mi app mediante socket
         this.io.on('connection', (cliente) => {
-            console.log( `Cliente conectado ` )
-            // console.log({cliente})
+
+            // Conectar Cliente
+            socket.conectarCliente( cliente )
+
+            // Configurar Usuario
+            socket.configurarUsuario( cliente, this.io )
+
+            // console.log( `Cliente conectado ` )
+            // cliente.id este no es el Id del usuario, sino el ID del socket
+            console.log(cliente.id)
 
             // Mensajes
             socket.mensaje( cliente, this.io )
