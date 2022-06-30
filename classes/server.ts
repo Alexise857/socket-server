@@ -6,6 +6,7 @@ import http from "http";
 import { SERVER_PORT } from "../global/enviroment";
 
 import * as socket from '../sockets/socket'
+import { obtenerUsuarios } from "../sockets/socket";
 
 export default class Server {
 
@@ -50,6 +51,9 @@ export default class Server {
             // Configurar Usuario
             socket.configurarUsuario( cliente, this.io )
 
+            // Obtener usuarios activos
+            socket.obtenerUsuarios( cliente, this.io )
+
             // console.log( `Cliente conectado ` )
             // cliente.id este no es el Id del usuario, sino el ID del socket
             console.log(cliente.id)
@@ -58,7 +62,7 @@ export default class Server {
             socket.mensaje( cliente, this.io )
 
             // Desconectar
-            socket.desconectar( cliente )
+            socket.desconectar( cliente, this.io )
 
 
         } )

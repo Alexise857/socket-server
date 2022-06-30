@@ -8,7 +8,7 @@ export class UsuarioLista {
     }
 
     // Agregar un usuario
-    public agregar( usuario: Usuario ){
+    public agregar( usuario: Usuario ) {
 
         this.lista.push( usuario )
         console.log(this.lista)
@@ -29,7 +29,7 @@ export class UsuarioLista {
 
     // Obtener lista de usuarios
     public getLista() {
-        return this.lista
+        return this.lista.filter( usuario => usuario.nombre !== 'sin-nombre' )
     }
 
     public getUsuario( id: string ) {
@@ -37,7 +37,7 @@ export class UsuarioLista {
     }
 
     // Obtener usuarios en una sala en particular
-    public getUsuariosEnSala( sala: string ){
+    public getUsuariosEnSala( sala: string ) {
         return this.lista.filter( usuario => usuario.sala === sala )
     }
 

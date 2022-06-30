@@ -11,11 +11,13 @@ export const conectarCliente = ( cliente: Socket ) => {
     usuariosConectados.agregar( usuario )
 }
 
-export const desconectar = ( cliente: Socket ) => {
+export const desconectar = ( cliente: Socket, io: socketIO.Server ) => {
 
     cliente.on('disconnect', () => {
         console.log('cliente desconectado')
         usuariosConectados.borrarUsuario( cliente.id )
+
+        io.emit('usuarios-activos', usuariosConectados.getLista() )
     })
 
 }
@@ -38,6 +40,7 @@ export const configurarUsuario = (cliente: Socket, io: socketIO.Server ) => {
         // console.log('configurando usuario', payload)
 
         usuariosConectados.actualizarNombre( cliente.id, payload.nombre )
+        io.emit('usuarios-activos', usuariosConectados.getLista() )
 
         callback({
             ok: true,
@@ -46,6 +49,15 @@ export const configurarUsuario = (cliente: Socket, io: socketIO.Server ) => {
 
     })
 
+}
+
+// Obtener Usuarios
+export const obtenerUsuarios = ( cliente: Socket, io: socketIO.Server ) => {
+    cliente.on('obtener-usuarios', () => {
+        // si no le ponemos el TO, está emitiendo a todos los usuarios
+        // el TO lo emitirá a la persona que acaba de entrar al chat (mandárselo a una persona en particular)
+        io.to( cliente.id ).emit('usuarios-activos', usuariosConectados.getLista() )
+    })
 }
 
 
